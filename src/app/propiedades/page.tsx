@@ -1,6 +1,20 @@
 import Link from "next/link";
+import { SlidersHorizontal, Map } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { PropertyCard } from "@/components/property/PropertyCard";
 
 export default function SearchResults() {
+  
+  // Dummy data generated for the MVP view
+  const dummyProperties = [
+    { id: 1, title: "Moderno Depa con Vista al Mar", price: 3200, location: "Miraflores, Lima", area: 90, rooms: 2, bathrooms: 2, isVerified: true, imageUrl: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80" },
+    { id: 2, title: "Amplio Flat cerca a Parque Kennedy", price: 2800, location: "Miraflores, Lima", area: 75, rooms: 1, bathrooms: 1, isVerified: false, imageUrl: "https://images.unsplash.com/photo-1502672260266-1c1de2d9d924?auto=format&fit=crop&w=800&q=80" },
+    { id: 3, title: "Duplex Exclusivo en Zona Financiera", price: 4500, location: "San Isidro, Lima", area: 120, rooms: 3, bathrooms: 3, isVerified: true, imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" },
+    { id: 4, title: "Acogedor departamento de estreno", price: 2100, location: "Surco, Lima", area: 65, rooms: 2, bathrooms: 1, isVerified: true, imageUrl: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80" },
+    { id: 5, title: "Penthouse con Piscina Privada", price: 6500, location: "San Isidro, Lima", area: 200, rooms: 4, bathrooms: 4, isVerified: true, imageUrl: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" },
+    { id: 6, title: "Departamento amoblado ideal para expats", price: 3500, location: "Barranco, Lima", area: 85, rooms: 2, bathrooms: 2, isVerified: true, imageUrl: "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=80" },
+  ];
+
   return (
     <div className="flex flex-col h-screen md:flex-row bg-background">
       {/* Sidebar List */}
@@ -12,44 +26,51 @@ export default function SearchResults() {
             Domia<span className="text-accent">.pe</span>
           </Link>
           <div className="flex gap-2">
-            <button className="px-4 py-2 bg-gray-100 dark:bg-dark-gray rounded-full text-sm font-medium">Filtros</button>
+            <Button variant="outline" size="sm">
+              <SlidersHorizontal size={16} className="mr-2" /> Filtros
+            </Button>
           </div>
         </div>
 
-        <h1 className="text-2xl font-bold text-foreground mb-4">Departamentos en alquiler en Lima</h1 >
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-foreground">Departamentos en alquiler en Lima</h1 >
+          <span className="text-sm text-gray-500 hidden sm:block">Mostrando {dummyProperties.length} resultados</span>
+        </div>
         
         {/* Grid of property cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Link href={`/propiedades/${i}`} key={i} className="group flex flex-col bg-white dark:bg-dark-gray rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all duration-300">
-              <div className="h-48 bg-gray-200 dark:bg-dark w-full relative">
-                {/* Placeholder Image */}
-                <div className="absolute top-3 left-3 bg-white/90 dark:bg-dark/90 px-3 py-1 rounded-full text-xs font-bold text-emerald-600">Verificado</div>
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg font-bold text-foreground">S/ 2,500 <span className="text-sm text-gray-400 font-normal">/ mes</span></h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm mt-1 line-clamp-1">Hermoso depa en Miraflores con vista al mar</p>
-                <div className="flex gap-4 mt-3 text-sm text-gray-500">
-                  <span>80 m²</span>
-                  <span>2 Hab.</span>
-                  <span>2 Baños</span>
-                </div>
-              </div>
-            </Link>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pb-20">
+          {dummyProperties.map((prop) => (
+            <PropertyCard 
+              key={prop.id}
+              id={prop.id}
+              title={prop.title}
+              price={prop.price}
+              location={prop.location}
+              area={prop.area}
+              rooms={prop.rooms}
+              bathrooms={prop.bathrooms}
+              isVerified={prop.isVerified}
+              imageUrl={prop.imageUrl}
+            />
           ))}
         </div>
       </div>
 
       {/* Map View */}
-      <div className="hidden md:block w-1/2 lg:w-[40%] bg-blue-50 dark:bg-dark sticky top-0 h-screen border-l border-gray-200 dark:border-gray-800 relative">
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-50">
-          {/* Map Placeholder Text */}
-          <div className="text-center">
-            <svg className="w-12 h-12 mx-auto mb-2 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-            </svg>
-            <p className="font-semibold text-gray-500">Mapa Interactivo de Zona</p>
-            <p className="text-sm text-gray-400">(Integración Mapbox pendiente)</p>
+      <div className="hidden md:block w-1/2 lg:w-[40%] bg-zinc-100 dark:bg-dark sticky top-0 h-screen border-l border-gray-200 dark:border-gray-800 relative overflow-hidden">
+        {/* Decorative Map Pattern instead of blank div */}
+        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.02]" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/cartographer.png")' }}></div>
+        
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-blue-50/50 to-transparent dark:from-dark-gray/50 z-10">
+          <div className="bg-white/80 dark:bg-dark-gray/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-gray-100 dark:border-gray-700 text-center max-w-sm">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
+              <Map size={32} />
+            </div>
+            <h3 className="text-lg font-bold text-foreground mb-2">Vista de Mapa Interactiva</h3>
+            <p className="text-sm text-gray-500 mb-6">Estamos conectando los servidores de Mapbox para mostrarte los inmuebles directamente aquí en tu próxima visita.</p>
+            <Button variant="primary" size="sm" fullWidth>
+              Simular Carga de Mapa
+            </Button>
           </div>
         </div>
       </div>

@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { MapPin, KeyRound, ArrowRight } from "lucide-react";
 
 export default function PublishWizard() {
   return (
@@ -7,7 +10,9 @@ export default function PublishWizard() {
         <Link href="/" className="text-2xl font-bold text-primary dark:text-white">
           Domia<span className="text-accent">.pe</span>
         </Link>
-        <button className="text-sm text-gray-500 font-medium">Guardar y salir</button>
+        <Button variant="ghost" size="sm">
+          Guardar y salir
+        </Button>
       </header>
 
       <main className="max-w-3xl mx-auto pt-16 px-4">
@@ -23,25 +28,25 @@ export default function PublishWizard() {
           ))}
         </div>
 
-        {/* Wizard Content (Step 1 placeholder) */}
+        {/* Wizard Content (Step 1) */}
         <div className="bg-white dark:bg-dark-gray rounded-3xl shadow-sm p-8 md:p-12 border border-gray-100 dark:border-gray-800">
           <h1 className="text-3xl font-bold text-foreground mb-2">¿Qué tipo de propiedad vas a publicar?</h1>
           <p className="text-gray-500 mb-8">Paso 1 de 5: Información básica de tu inmueble.</p>
 
           <div className="grid grid-cols-2 gap-4 mb-8">
-            <button className="border-2 border-primary bg-blue-50 dark:bg-dark p-6 rounded-2xl flex flex-col items-center gap-3 text-primary font-bold">
-              <span className="text-3xl">🔑</span>
+            <button className="border-2 border-primary bg-blue-50 dark:bg-dark p-6 rounded-2xl flex flex-col items-center gap-3 text-primary font-bold shadow-sm">
+              <KeyRound size={32} className="text-primary" />
               Alquiler
             </button>
             <button className="border border-gray-200 dark:border-gray-700 hover:border-primary/50 p-6 rounded-2xl flex flex-col items-center gap-3 text-foreground font-medium transition-colors">
-              <span className="text-3xl">💰</span>
+              <span className="text-3xl leading-none">V</span>
               Venta
             </button>
           </div>
 
           <div className="mb-8">
             <label className="block text-sm font-semibold text-foreground mb-2">Tipo de Inmueble</label>
-            <select className="w-full bg-gray-50 dark:bg-dark border border-gray-200 dark:border-gray-700 p-4 rounded-xl outline-none focus:border-primary transition-colors text-foreground">
+            <select className="w-full bg-gray-50 dark:bg-dark border border-gray-200 dark:border-gray-700 p-3.5 rounded-xl outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-foreground">
               <option>Departamento</option>
               <option>Casa</option>
               <option>Cuarto / Habitación</option>
@@ -51,13 +56,18 @@ export default function PublishWizard() {
           </div>
 
           <div className="mb-12">
-            <label className="block text-sm font-semibold text-foreground mb-2">Ubicación exacta</label>
-            <input type="text" placeholder="Ej. Calle Las Camelias 123, San Isidro" className="w-full bg-gray-50 dark:bg-dark border border-gray-200 dark:border-gray-700 p-4 rounded-xl outline-none focus:border-primary transition-colors text-foreground"/>
+            <Input 
+              icon={MapPin}
+              label="Ubicación exacta"
+              placeholder="Ej. Calle Las Camelias 123, San Isidro"
+            />
           </div>
 
-          <div className="flex justify-between items-center border-t border-gray-100 dark:border-gray-800 pt-8">
-            <button className="text-gray-500 font-medium px-6 py-3 hover:text-foreground">Cancelar</button>
-            <button className="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-xl font-bold transition-colors">Siguiente Paso</button>
+          <div className="flex justify-between items-center border-t border-gray-100 dark:border-gray-800 pt-8 mt-8">
+            <Button variant="ghost">Cancelar</Button>
+            <Button variant="primary">
+              Siguiente Paso <ArrowRight size={18} className="ml-2" />
+            </Button>
           </div>
         </div>
       </main>
