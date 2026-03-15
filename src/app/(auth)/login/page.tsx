@@ -3,17 +3,28 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Mail, Lock, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { Mail, Lock, ArrowRight, AlertCircle } from "lucide-react";
+import { useState, useRef } from "react";
+import { signIn } from "@/app/actions/auth-actions";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formRef.current) return;
     setIsLoading(true);
-    // TODO: Connect mapped Supabase function
-    setTimeout(() => setIsLoading(false), 1500);
+    setError(null);
+
+    const formData = new FormData(formRef.current);
+    const result = await signIn(formData);
+
+    if (result?.error) {
+      setError("Credenciales incorrectas. Verifica tu correo y contraseña.");
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -28,9 +39,17 @@ export default function LoginPage() {
           <p className="text-gray-500 mt-2">Bienvenido de vuelta a tu plataforma inmobiliaria.</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3 text-red-700 dark:text-red-400 text-sm">
+            <AlertCircle size={18} />
+            {error}
+          </div>
+        )}
+
+        <form ref={formRef} onSubmit={handleLogin} className="space-y-6">
           <Input 
             icon={Mail}
+            name="email"
             type="email"
             label="Correo Electrónico"
             placeholder="tumail@ejemplo.com"
@@ -40,6 +59,7 @@ export default function LoginPage() {
           <div>
             <Input 
               icon={Lock}
+              name="password"
               type="password"
               label="Contraseña"
               placeholder="••••••••"

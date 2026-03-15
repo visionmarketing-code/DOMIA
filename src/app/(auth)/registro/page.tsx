@@ -3,19 +3,52 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Mail, Lock, User, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { Mail, Lock, User, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
+import { useState, useRef } from "react";
+import { signUp } from "@/app/actions/auth-actions";
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState<"seeker" | "owner">("seeker");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formRef.current) return;
     setIsLoading(true);
-    // TODO: Connect mapped Supabase function
-    setTimeout(() => setIsLoading(false), 1500);
+    setError(null);
+
+    const formData = new FormData(formRef.current);
+    formData.append("user_type", userType);
+
+    const result = await signUp(formData);
+
+    if (result?.error) {
+      setError(result.error);
+      setIsLoading(false);
+    } else {
+      setSuccess(true);
+    }
   };
+
+  if (success) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-black p-4">
+        <div className="w-full max-w-md bg-white dark:bg-dark-gray rounded-3xl shadow-xl p-12 text-center border border-gray-100 dark:border-gray-800">
+          <div className="w-20 h-20 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 size={40} />
+          </div>
+          <h2 className="text-2xl font-bold mb-2">¡Cuenta creada!</h2>
+          <p className="text-gray-500 mb-8">Revisa tu correo electrónico para confirmar tu cuenta y acceder.</p>
+          <Link href="/login">
+            <Button variant="primary" fullWidth>Ir a Iniciar Sesión</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-black p-4 py-12">
@@ -47,9 +80,17 @@ export default function RegisterPage() {
           </button>
         </div>
 
-        <form onSubmit={handleRegister} className="space-y-5">
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3 text-red-700 dark:text-red-400 text-sm">
+            <AlertCircle size={18} />
+            {error}
+          </div>
+        )}
+
+        <form ref={formRef} onSubmit={handleRegister} className="space-y-5">
           <Input 
             icon={User}
+            name="full_name"
             type="text"
             label="Nombre Completo"
             placeholder="Juan Pérez"
@@ -58,6 +99,7 @@ export default function RegisterPage() {
 
           <Input 
             icon={Mail}
+            name="email"
             type="email"
             label="Correo Electrónico"
             placeholder="tumail@ejemplo.com"
@@ -66,6 +108,7 @@ export default function RegisterPage() {
           
           <Input 
             icon={Lock}
+            name="password"
             type="password"
             label="Contraseña"
             placeholder="Mínimo 8 caracteres"
