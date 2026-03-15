@@ -8,9 +8,38 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Domia | Plataforma Inmobiliaria Inteligente en Perú",
-  description: "Encuentra tu próximo espacio o el inquilino ideal en tiempo récord, con cero complicaciones y máxima seguridad.",
+  title: {
+    default: "Domia | Plataforma Inmobiliaria con IA en Perú",
+    template: "%s | Domia",
+  },
+  description: "Encuentra departamentos, casas y locales en alquiler o venta en Lima y el Perú. Tecnología de inteligencia artificial para propietarios e inquilinos.",
+  keywords: ["inmobiliaria peru", "departamentos en alquiler lima", "casas en venta peru", "alquiler departamentos miraflores", "portal inmobiliario peru"],
+  authors: [{ name: "Domia" }],
+  creator: "Domia",
+  openGraph: {
+    type: "website",
+    locale: "es_PE",
+    url: "https://domia.pe",
+    siteName: "Domia",
+    title: "Domia | Plataforma Inmobiliaria con IA en Perú",
+    description: "Encuentra departamentos, casas y locales en alquiler o venta en Lima y el Perú.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Domia | Plataforma Inmobiliaria con IA en Perú",
+    description: "Encuentra departamentos, casas y locales en alquiler o venta en Lima y el Perú.",
+    creator: "@domia_pe",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
+
 
 export default function RootLayout({
   children,
